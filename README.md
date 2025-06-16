@@ -61,7 +61,7 @@ It is recommended to use a dedicated conda environment for this project. Below a
 ├── videos/                  # Sample videos
 └── ...
 ```
-![Emotion Detection](attachment://github.com/ahmed-saleh111/Emotions/blob/main/emotion.gif))
+![Emotion Detection](emotion.gif))
 
 ## Model Files
 - Place your PyTorch or ONNX models in the `models/` directory.
