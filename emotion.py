@@ -1,13 +1,16 @@
 import cv2
 from ultralytics import YOLO
+import torch
 
-# Load YOLO emotion detection model
-model_face = YOLO("models\yolov11n-face.pt") 
-model_emotion = YOLO("models\yolo11s-emotion.pt") 
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Using device: {device}")
 
+
+model_face = YOLO("models/yolov11n-face.pt").to(device)  # Face detection model
+model_emotion = YOLO("models/yolo11s-emotion.pt").to(device)  # Emotion detection model
 # Define emotion labels
 emotion_labels = {
-    0: 'anger', 1: 'content', 2: 'disgust', 3: 'fear',
+    0: 'anger', 1: 'contempt', 2: 'disgust', 3: 'fear',
     4: 'happy', 5: 'neutral', 6: 'sad', 7: 'surprise'
 }
 # emotion_labels = model_emotion.names
@@ -58,17 +61,17 @@ def process_emotion_frame(frame, scale_factor=0.2):
         label = emotion_labels.get(cls_id, "unknown")
 
         # Draw bounding box on the original frame
-        cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 255, 0), 2)
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
 
         # Draw label
-        cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX,
+        cv2.putText(frame, label, (x1, y1 - 20), cv2.FONT_HERSHEY_SIMPLEX,
                     0.8, (255, 0, 0), 2)
 
     return frame
 
 
 def main():
-    cap = cv2.VideoCapture(r"videos\video4.mp4")  # Open the default webcam (0 means primary camera)
+    cap = cv2.VideoCapture("videos/video4.mp4")  # Open the default webcam (0 means primary camera)
     
     if not cap.isOpened():
         print("Cannot open camera")
